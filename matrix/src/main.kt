@@ -28,8 +28,8 @@ fun main(args: Array<String>) {
     var l = System.currentTimeMillis()
 
     val kotlinStrassen: KotlinStrassen = KotlinStrassen()
-    val strassen: MatrixMultiplications = MatrixMultiplications()
-    var result1 = kotlinStrassen.multiplyMatrix(firstMatrix, secondMatrix)
+
+    val result1 = kotlinStrassen.multiplyMatrix(firstMatrix, secondMatrix)
 
     print("Strassen: ")
     println(System.currentTimeMillis() - l)
@@ -75,14 +75,15 @@ fun main(args: Array<String>) {
 
     println()
 
-    var sum = 0
-    for (i in 0..n - 1) {
-        for (j in 0..n - 1) {
-            if (result2[i][j] != result3[i][j] || result1[i][j] != result3[i][j] || result2[i][j] != result1[i][j]) {
-                println("$i - $j")
-            }
-        }
-    }
+//    var sum = 0
+//    for (i in 0..n - 1) {
+//        for (j in 0..n - 1) {
+//            if (result2[i][j].toInt() != result3[i][j].toInt() || result1[i][j].toInt() != result3[i][j].toInt()
+//                    || result2[i][j].toInt() != result1[i][j].toInt()) {
+//                println("$i - $j")
+//            }
+//        }
+//    }
 //
 //    for (i in 0 until result3.size) {
 //        for (j in 0 until result3.size) {
@@ -93,9 +94,9 @@ fun main(args: Array<String>) {
 //    }
 //    println("\n")
 //
-//    for (i in 0 until result2.size) {
-//        for (j in 0 until result2.size) {
-//            print(result2[i][j])
+//    for (i in 0 until result1.size) {
+//        for (j in 0 until result1.size) {
+//            print(result1[i][j])
 //            print(" ")
 //        }
 //        println()

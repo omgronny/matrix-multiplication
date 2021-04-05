@@ -34,9 +34,6 @@ class KotlinStrassen {
 
         val n = a.size shr 1
 
-        val rows = a.size
-        val columns = a[0].size
-
         for (i in 0 until n) {
 
             System.arraycopy(a[i], 0, a11[i], 0, n)
@@ -72,9 +69,6 @@ class KotlinStrassen {
 
         val n = a11.size
         val a = Array(n shl 1) { DoubleArray(n shl 1) }
-
-        val rows = a.size
-        val columns = a[0].size
 
         for (i in 0 until n) {
 
@@ -132,7 +126,7 @@ class KotlinStrassen {
 
         var n = n
 
-        if (n <= 2) {
+        if (n <= 256) {
             val matrix = Matrix()
             return matrix.matrixFastTranspositionMultiplication(a, b)
         }
@@ -185,7 +179,7 @@ class KotlinStrassen {
                 //aToPowerOf[i][j] = a[i][j]
                 //bToPowerOf[i][j] = b[i][j]
             System.arraycopy(a[i], 0, aToPowerOf[i], 0, n)
-            System.arraycopy(a[i], 0, aToPowerOf[i], 0, n)
+            System.arraycopy(b[i], 0, bToPowerOf[i], 0, n)
 
         }
 
