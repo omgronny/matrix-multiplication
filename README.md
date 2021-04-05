@@ -1,3 +1,3 @@
 # myProjects
 
-The directory for my special projects include interships
+The directory for my special projects including interships
