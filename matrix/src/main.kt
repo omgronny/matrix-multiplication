@@ -36,9 +36,9 @@ fun main(args: Array<String>) {
 
     l = System.currentTimeMillis()
 
-    var result2 = matrix.matrixCashTranspositionMultiplication(firstMatrix, secondMatrix)
+    var result2 = matrix.matrixCacheTranspositionMultiplication(firstMatrix, secondMatrix)
 
-    print("Standard, cash transposition ")
+    print("Standard, cache transposition ")
     println(System.currentTimeMillis() - l)
 
     l = System.currentTimeMillis()
@@ -75,18 +75,18 @@ fun main(args: Array<String>) {
 
     println()
 
-//    var sum = 0
-//    for (i in 0..n - 1) {
-//        for (j in 0..n - 1) {
-//            if (result2[i][j] != result3[i][j] || result1[i][j] != result2[i][j] || result1[i][j] != result3[i][j]) {
-//                println("$i - $j")
-//            }
-//        }
-//    }
-
-//    for (i in 0 until result1.size) {
-//        for (j in 0 until result1.size) {
-//            print(result1[i][j])
+    var sum = 0
+    for (i in 0..n - 1) {
+        for (j in 0..n - 1) {
+            if (result2[i][j] != result3[i][j] || result1[i][j] != result3[i][j] || result2[i][j] != result1[i][j]) {
+                println("$i - $j")
+            }
+        }
+    }
+//
+//    for (i in 0 until result3.size) {
+//        for (j in 0 until result3.size) {
+//            print(result3[i][j])
 //            print(" ")
 //        }
 //        println()

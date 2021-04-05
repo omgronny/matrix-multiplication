@@ -1,5 +1,21 @@
 class Matrix {
 
+    fun matrixMultiplication(firstMatrix: Array<Array<Double>>, secondMatrix: Array<Array<Double>>):
+            Array<Array<Double>> {
+
+        val n = firstMatrix.size
+
+        val m = secondMatrix[0].size
+
+        var result: Array<Array<Double>> = Array(n, {Array(m, {0.0})})
+
+        if (n != m) {
+            return matrixCacheMultiplication(firstMatrix, secondMatrix)
+        }
+
+        return result
+    }
+
     fun matrixStandartMultiplication(firstMatrix: Array<Array<Double>>, secondMatrix: Array<Array<Double>>):
             Array<Array<Double>> {
 
@@ -11,10 +27,12 @@ class Matrix {
 
         //println("$n, $m")
 
-        for (i in 0..n - 1) {
-            for (j in 0..m - 1) {
-                for (k in 0..firstMatrix[0].size - 1) {
+        for (i in 0 until n) {
+            for (j in 0 until m) {
+                for (k in 0 until firstMatrix[0].size) {
+
                     result[i][j] += firstMatrix[i][k] * secondMatrix[k][j]
+
                 }
             }
         }
@@ -25,7 +43,7 @@ class Matrix {
 
     }
 
-    fun matrixCashMultiplication(firstMatrix: Array<Array<Double>>, secondMatrix: Array<Array<Double>>):
+    fun matrixCacheMultiplication(firstMatrix: Array<Array<Double>>, secondMatrix: Array<Array<Double>>):
             Array<Array<Double>> {
 
         val n = firstMatrix.size
@@ -39,26 +57,26 @@ class Matrix {
 
     }
 
-    fun matrixCashTranspositionMultiplication(firstMatrix: Array<DoubleArray>, secondMatrix: Array<DoubleArray>):
+    fun matrixCacheTranspositionMultiplication(firstMatrix: Array<DoubleArray>, secondMatrix: Array<DoubleArray>):
             Array<DoubleArray> {
 
         val firstRows = firstMatrix.size
         val firstColumns = firstMatrix[0].size
-        //val secondRows = secondMatrix.size
+        val secondRows = secondMatrix.size
         val secondColumns = secondMatrix[0].size
 
-        val secondTransposition = cashTransposition(secondMatrix)
+        val secondTransposition = cacheTransposition(secondMatrix)
 
         //val secondTransRows = secondTransposition.size
         //val secondTransColumns = secondTransposition[0].size
 
         val result = Array(firstRows) { DoubleArray(secondColumns) }
 
-        for (j in 0 until firstColumns) {
+        for (i in 0 until firstRows) {
 
-            for (i in 0 until firstRows) {
+            for (j in 0 until secondColumns) {
                 var sum = 0.0
-                for (k in 0 until secondColumns) {
+                for (k in 0 until secondRows) {
 
                     sum += firstMatrix[i][k] * secondTransposition[j][k]
 
@@ -81,7 +99,7 @@ class Matrix {
         val secondRows = secondMatrix.size
         val secondColumns = secondMatrix[0].size
 
-        var result = Array(firstRows) { DoubleArray(secondColumns) }
+        val result = Array(firstRows) { DoubleArray(secondColumns) }
 
         val nowRow = Array(secondRows, {0.0})
 
@@ -124,7 +142,7 @@ class Matrix {
 
     }
 
-    fun matrixStrassenCashMultiplication(firstMatrix: Array<Array<Double>>, secondMatrix: Array<Array<Double>>):
+    fun matrixStrassenCacheMultiplication(firstMatrix: Array<Array<Double>>, secondMatrix: Array<Array<Double>>):
             Array<Array<Double>> {
 
         val n = firstMatrix.size
@@ -141,7 +159,7 @@ class Matrix {
 //
 //    }
 
-    fun cashTransposition(matrix: Array<DoubleArray>): Array<DoubleArray> {
+    fun cacheTransposition(matrix: Array<DoubleArray>): Array<DoubleArray> {
 
         val subMatrixSize = 256
 
@@ -149,12 +167,13 @@ class Matrix {
 
         val columns = matrix[0].size
 
-        val result = Array(rows) {DoubleArray(columns)}
+        val result = Array(columns) {DoubleArray(rows)}
 
-        for (j in 0 until columns step subMatrixSize) {
-            for (i in 0 until rows step subMatrixSize) {
-                for (k in j until Math.min(columns, j + subMatrixSize)) {
-                    for (s in i until Math.min(rows, i + subMatrixSize)) {
+        for (i in 0 until rows step subMatrixSize) {
+            for (j in 0 until columns step subMatrixSize) {
+
+                for (k in i until Math.min(rows, i + subMatrixSize)) {
+                    for (s in j until Math.min(columns, j + subMatrixSize)) {
 
                         result[s][k] = matrix[k][s]
 

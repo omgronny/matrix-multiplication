@@ -15,8 +15,8 @@ class KotlinStrassen {
 
         val result = Array(newSize) { DoubleArray(newSize) }
 
-        for (i in 0..newSize-1) {
-            for (j in 0..newSize-1) {
+        for (i in 0 until newSize) {
+            for (j in 0 until newSize) {
                 if (j < n && i < n) {
                     result[i][j] = a[i][j]
                 } else {
@@ -37,7 +37,7 @@ class KotlinStrassen {
         val rows = a.size
         val columns = a[0].size
 
-        for (i in 0..n-1) {
+        for (i in 0 until n) {
 
             System.arraycopy(a[i], 0, a11[i], 0, n)
             System.arraycopy(a[i], n, a12[i], 0, n)
@@ -76,11 +76,11 @@ class KotlinStrassen {
         val rows = a.size
         val columns = a[0].size
 
-        for (i in 0..n-1) {
+        for (i in 0 until n) {
 
             System.arraycopy(a11[i], 0, a[i], 0, n)
             System.arraycopy(a12[i], 0, a[i], n, n)
-            System.arraycopy(a21[i], 0, a[i + n], 0, n);
+            System.arraycopy(a21[i], 0, a[i + n], 0, n)
             System.arraycopy(a22[i], 0, a[i + n], n, n)
 
         }
@@ -92,53 +92,53 @@ class KotlinStrassen {
 
     fun summation(a: Array<DoubleArray>, b: Array<DoubleArray>): Array<DoubleArray> {
 
-        val Arows = a.size
-        val Acolumns: Int = a[0].size
+        val aRows = a.size
+        val aColumns: Int = a[0].size
 
-        val Bcolumns: Int = b[0].size
+        val bColumns: Int = b[0].size
+        val result = Array(aRows) { DoubleArray(aColumns) }
 
-        val C = Array(Arows) { DoubleArray(Bcolumns) }
+        for (i in 0 until aRows) {
+            for (j in 0 until aColumns) {
 
-        for (j in 0 until Acolumns) {
-
-            for (i in 0 until Arows) {
-
-                C[i][j] = a[i][j] + b[i][j]
+                result[i][j] = a[i][j] + b[i][j]
 
             }
         }
-        return C
+
+        return result
     }
 
     fun subtraction(a: Array<DoubleArray>, b: Array<DoubleArray>): Array<DoubleArray> {
 
-        val Arows = a.size
-        val Acolumns: Int = a[0].size
+        val aRows = a.size
+        val aColumns: Int = a[0].size
 
-        val Bcolumns: Int = b[0].size
-        val C = Array(Arows) { DoubleArray(Bcolumns) }
+        val bColumns: Int = b[0].size
+        val result = Array(aRows) { DoubleArray(aColumns) }
 
-        for (j in 0..Acolumns-1) {
+        for (i in 0 until aRows) {
+            for (j in 0 until aColumns) {
 
-            for (i in 0..Arows-1) {
-                C[i][j] = a[i][j] - b[i][j]
+                result[i][j] = a[i][j] - b[i][j]
+
             }
         }
 
-        return C
+        return result
     }
 
     fun multiStrassen(a: Array<DoubleArray>, b: Array<DoubleArray>, n: Int): Array<DoubleArray> {
 
         var n = n
-        if (n <= 256) {
 
+        if (n <= 2) {
             val matrix = Matrix()
             return matrix.matrixFastTranspositionMultiplication(a, b)
-
         }
 
         n = n shr 1
+
         val a11 = Array(n) { DoubleArray(n) }
         val a12 = Array(n) { DoubleArray(n) }
         val a21 = Array(n) { DoubleArray(n) }
@@ -147,8 +147,10 @@ class KotlinStrassen {
         val b12 = Array(n) { DoubleArray(n) }
         val b21 = Array(n) { DoubleArray(n) }
         val b22 = Array(n) { DoubleArray(n) }
+
         splitMatrix(a, a11, a12, a21, a22)
         splitMatrix(b, b11, b12, b21, b22)
+
         val p1 = multiStrassen(summation(a11, a22), summation(b11, b22), n)
         val p2 = multiStrassen(summation(a21, a22), b11, n)
         val p3 = multiStrassen(a11, subtraction(b12, b22), n)
@@ -156,6 +158,7 @@ class KotlinStrassen {
         val p5 = multiStrassen(summation(a11, a12), b22, n)
         val p6 = multiStrassen(subtraction(a21, a11), summation(b11, b12), n)
         val p7 = multiStrassen(subtraction(a12, a22), summation(b21, b22), n)
+
         val c11 = summation(summation(p1, p4), subtraction(p7, p5))
         val c12 = summation(p3, p5)
         val c21 = summation(p2, p4)
@@ -165,16 +168,38 @@ class KotlinStrassen {
 
     }
 
-    public fun multiplyMatrix(a: Array<DoubleArray>, b: Array<DoubleArray>): Array<DoubleArray> {
+    fun multiplyMatrix(a: Array<DoubleArray>, b: Array<DoubleArray>): Array<DoubleArray> {
 
-        val aToPowerOf = upper(a)
-        val bToPowerOf = upper(b)
+        val n = a.size
+
+        var newSize = 1
+
+        while(n > newSize) {
+            newSize *= 2
+        }
+
+        val aToPowerOf = Array(newSize) { DoubleArray(newSize) }
+        val bToPowerOf = Array(newSize) { DoubleArray(newSize) }
+
+        for (i in 0 until n) {
+                //aToPowerOf[i][j] = a[i][j]
+                //bToPowerOf[i][j] = b[i][j]
+            System.arraycopy(a[i], 0, aToPowerOf[i], 0, n)
+            System.arraycopy(a[i], 0, aToPowerOf[i], 0, n)
+
+        }
 
         val resultOfMultiplication = multiStrassen(aToPowerOf, bToPowerOf, aToPowerOf.size)
 
         val finalResult = Array(a.size) {DoubleArray(b[0].size)}
 
-        return  resultOfMultiplication
+        for (i in 0 until a.size) {
+            //finalResult[i][j] = resultOfMultiplication[i][j]
+            System.arraycopy(resultOfMultiplication[i], 0, finalResult[i], 0,
+                    finalResult[i].size)
+        }
+
+        return  finalResult
 
 
     }
