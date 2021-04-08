@@ -1,36 +1,12 @@
 import java.util.*
 
+/**
+ * Class for multiplication matrix using Strassen - algorithm
+ */
 class KotlinStrassen {
 
-    //******************************************************************************************
-
-    fun upper(a: Array<DoubleArray>): Array<DoubleArray> {
-
-        val n = a.size
-        var newSize = 1
-
-        while(n > newSize) {
-            newSize *= 2
-        }
-
-        val result = Array(newSize) { DoubleArray(newSize) }
-
-        for (i in 0 until newSize) {
-            for (j in 0 until newSize) {
-                if (j < n && i < n) {
-                    result[i][j] = a[i][j]
-                } else {
-                    result[i][j] = 0.0
-                }
-
-            }
-        }
-
-        return result
-    }
-
-    fun splitMatrix(a: Array<DoubleArray>, a11: Array<DoubleArray>, a12: Array<DoubleArray>, a21: Array<DoubleArray>,
-                    a22: Array<DoubleArray>) {
+    private fun splitMatrix(a: Array<DoubleArray>, a11: Array<DoubleArray>, a12: Array<DoubleArray>, a21: Array<DoubleArray>,
+                            a22: Array<DoubleArray>) {
 
         val n = a.size shr 1
 
@@ -43,29 +19,11 @@ class KotlinStrassen {
 
         }
 
-//        for (i in 0..columns-1) {
-//
-//            for (j in 0..rows-1) {
-//
-//                if (i < columns/2 && j < rows/2) {
-//                    a11[j][i] = a[j][i]
-//                } else if (i >= columns/2 && j < rows/2) {
-//                    a12[j][i % rows/2] = a[j][i]
-//                } else if (i < columns/2 && j >= rows/2) {
-//                    a21[j % rows/2][i] = a[j][i]
-//                } else if (i >= columns/2 && j >= rows/2) {
-//                    a22[j % rows/2][i % rows/2] = a[j][i]
-//                }
-//
-//            }
-//
-//        }
-
     }
 
-    //******************************************************************************************
-    fun collectMatrix(a11: Array<DoubleArray>, a12: Array<DoubleArray>, a21: Array<DoubleArray>,
-                      a22: Array<DoubleArray>): Array<DoubleArray> {
+
+    private fun collectMatrix(a11: Array<DoubleArray>, a12: Array<DoubleArray>, a21: Array<DoubleArray>,
+                              a22: Array<DoubleArray>): Array<DoubleArray> {
 
         val n = a11.size
         val a = Array(n shl 1) { DoubleArray(n shl 1) }
@@ -84,7 +42,7 @@ class KotlinStrassen {
 
     }
 
-    fun summation(a: Array<DoubleArray>, b: Array<DoubleArray>): Array<DoubleArray> {
+    private fun summation(a: Array<DoubleArray>, b: Array<DoubleArray>): Array<DoubleArray> {
 
         val aRows = a.size
         val aColumns: Int = a[0].size
@@ -103,7 +61,7 @@ class KotlinStrassen {
         return result
     }
 
-    fun subtraction(a: Array<DoubleArray>, b: Array<DoubleArray>): Array<DoubleArray> {
+    private fun subtraction(a: Array<DoubleArray>, b: Array<DoubleArray>): Array<DoubleArray> {
 
         val aRows = a.size
         val aColumns: Int = a[0].size
@@ -122,11 +80,11 @@ class KotlinStrassen {
         return result
     }
 
-    fun multiStrassen(a: Array<DoubleArray>, b: Array<DoubleArray>, n: Int): Array<DoubleArray> {
+    private fun multiStrassen(a: Array<DoubleArray>, b: Array<DoubleArray>, n: Int): Array<DoubleArray> {
 
         var n = n
 
-        if (n <= 256) {
+        if (n <= 128) {
             val matrix = Matrix()
             return matrix.matrixFastTranspositionMultiplication(a, b)
         }
@@ -176,8 +134,7 @@ class KotlinStrassen {
         val bToPowerOf = Array(newSize) { DoubleArray(newSize) }
 
         for (i in 0 until n) {
-                //aToPowerOf[i][j] = a[i][j]
-                //bToPowerOf[i][j] = b[i][j]
+
             System.arraycopy(a[i], 0, aToPowerOf[i], 0, n)
             System.arraycopy(b[i], 0, bToPowerOf[i], 0, n)
 
@@ -188,13 +145,15 @@ class KotlinStrassen {
         val finalResult = Array(a.size) {DoubleArray(b[0].size)}
 
         for (i in 0 until a.size) {
-            //finalResult[i][j] = resultOfMultiplication[i][j]
+
             System.arraycopy(resultOfMultiplication[i], 0, finalResult[i], 0,
                     finalResult[i].size)
+
         }
 
         return  finalResult
 
 
     }
+
 }

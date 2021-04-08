@@ -1,62 +1,61 @@
+import kotlin.math.min
+
+/**
+ * Class for multiplication matrix using standard transposition methods
+ */
 class Matrix {
 
-    fun matrixMultiplication(firstMatrix: Array<Array<Double>>, secondMatrix: Array<Array<Double>>):
-            Array<Array<Double>> {
+    /**
+     * Main method for multiplication two matrix. It find the most optimal method
+     */
+    fun matrixMultiplication(firstMatrix: Array<DoubleArray>, secondMatrix: Array<DoubleArray>):
+            Array<DoubleArray>? {
 
         val n = firstMatrix.size
 
         val m = secondMatrix[0].size
 
-        var result: Array<Array<Double>> = Array(n, {Array(m, {0.0})})
+        if (firstMatrix[0].size != secondMatrix.size) {
+            return null
+        }
 
         if (n != m) {
-            return matrixCacheMultiplication(firstMatrix, secondMatrix)
-        }
 
-        return result
-    }
+            return if (n <= 500) {
 
-    fun matrixStandartMultiplication(firstMatrix: Array<Array<Double>>, secondMatrix: Array<Array<Double>>):
-            Array<Array<Double>> {
+                matrixFastTranspositionMultiplication(firstMatrix, secondMatrix)
 
-        val n = firstMatrix.size
+            } else {
 
-        val m = secondMatrix[0].size
-
-        var result: Array<Array<Double>> = Array(n, {Array(m, {0.0})})
-
-        //println("$n, $m")
-
-        for (i in 0 until n) {
-            for (j in 0 until m) {
-                for (k in 0 until firstMatrix[0].size) {
-
-                    result[i][j] += firstMatrix[i][k] * secondMatrix[k][j]
-
-                }
+                matrixCacheTranspositionMultiplication(firstMatrix, secondMatrix)
             }
+
+        } else {
+
+            return if (n in 0..500) {
+
+                matrixFastTranspositionMultiplication(firstMatrix, secondMatrix)
+
+            } else if ((n in 501..900) || (n in 1025..1700 ) || (n in 2049..3800)) {
+
+                matrixCacheTranspositionMultiplication(firstMatrix, secondMatrix)
+
+            } else {
+
+                val kotlinStrassen = KotlinStrassen()
+                kotlinStrassen.multiplyMatrix(firstMatrix, secondMatrix)
+
+            }
+
+
+
         }
 
-        return result
-
-
-
     }
 
-    fun matrixCacheMultiplication(firstMatrix: Array<Array<Double>>, secondMatrix: Array<Array<Double>>):
-            Array<Array<Double>> {
-
-        val n = firstMatrix.size
-
-        val m = secondMatrix[0].size
-
-        var result: Array<Array<Double>> = Array(n, {Array(m, {0.0})})
-
-
-        return result
-
-    }
-
+    /**
+     * The method for multiplication two matrix using cache transposition
+     */
     fun matrixCacheTranspositionMultiplication(firstMatrix: Array<DoubleArray>, secondMatrix: Array<DoubleArray>):
             Array<DoubleArray> {
 
@@ -83,6 +82,7 @@ class Matrix {
                 }
 
                 result[i][j] = sum
+
             }
 
         }
@@ -91,6 +91,9 @@ class Matrix {
 
     }
 
+    /**
+     * The method for multiplication two matrix using fast transposition
+     */
     fun matrixFastTranspositionMultiplication(firstMatrix: Array<DoubleArray>, secondMatrix: Array<DoubleArray>):
             Array<DoubleArray> {
 
@@ -105,9 +108,11 @@ class Matrix {
 
         for (j in 0 until secondColumns) {
 
+
             for (k in 0 until firstColumns) {
-                nowRow[k] = secondMatrix[k][j]
+                nowRow[k] = secondMatrix[k][j]      // Transpose one column of the second matrix
             }
+
 
             for (i in 0 until firstRows) {
 
@@ -129,39 +134,12 @@ class Matrix {
     }
 
 
-    fun matrixStrassenMultiplication(firstMatrix: Array<Array<Double>>, secondMatrix: Array<Array<Double>>):
-            Array<Array<Double>> {
 
-        val n = firstMatrix.size
 
-        val m = secondMatrix[0].size
-
-        var result: Array<Array<Double>> = Array(n, {Array(m, {0.0})})
-
-        return result
-
-    }
-
-    fun matrixStrassenCacheMultiplication(firstMatrix: Array<Array<Double>>, secondMatrix: Array<Array<Double>>):
-            Array<Array<Double>> {
-
-        val n = firstMatrix.size
-
-        val m = secondMatrix[0].size
-
-        var result: Array<Array<Double>> = Array(n, {Array(m, {0.0})})
-
-        return result
-
-    }
-
-//    fun spliter(firstMatrix11: Array<Array<Int>>, secondMatrix11: Array<Array<Int>>): Array<Array<Int>> {
-//
-//    }
-
-    fun cacheTransposition(matrix: Array<DoubleArray>): Array<DoubleArray> {
-
-        val subMatrixSize = 256
+    /**
+     * The method which transposes a matrix using cache
+     */
+    private fun cacheTransposition(matrix: Array<DoubleArray>, subMatrixSize: Int = 256): Array<DoubleArray> {
 
         val rows = matrix.size
 
@@ -172,8 +150,8 @@ class Matrix {
         for (i in 0 until rows step subMatrixSize) {
             for (j in 0 until columns step subMatrixSize) {
 
-                for (k in i until Math.min(rows, i + subMatrixSize)) {
-                    for (s in j until Math.min(columns, j + subMatrixSize)) {
+                for (k in i until min(rows, i + subMatrixSize)) {
+                    for (s in j until min(columns, j + subMatrixSize)) {
 
                         result[s][k] = matrix[k][s]
 
@@ -183,6 +161,7 @@ class Matrix {
         }
         //matrix = result
         return result
+
     }
 
 
