@@ -3,10 +3,10 @@ import kotlin.math.min
 /**
  * Class for multiplication matrix using standard transposition methods
  */
-class Matrix {
+class MatrixTransposition {
 
     /**
-     * Main method for multiplication two matrix. It find the most optimal method
+     * Method method for multiplying two matrices. It find the most optimal algorithm
      */
     fun matrixMultiplication(firstMatrix: Array<DoubleArray>, secondMatrix: Array<DoubleArray>):
             Array<DoubleArray>? {
@@ -21,13 +21,14 @@ class Matrix {
 
         if (n != m) {
 
-            return if (n <= 500) {
+            return if (n in 0..500) {
 
                 matrixFastTranspositionMultiplication(firstMatrix, secondMatrix)
 
             } else {
 
                 matrixCacheTranspositionMultiplication(firstMatrix, secondMatrix)
+
             }
 
         } else {
@@ -54,7 +55,7 @@ class Matrix {
     }
 
     /**
-     * The method for multiplication two matrix using cache transposition
+     * Method that multiplies matrices using cache transposition
      */
     fun matrixCacheTranspositionMultiplication(firstMatrix: Array<DoubleArray>, secondMatrix: Array<DoubleArray>):
             Array<DoubleArray> {
@@ -64,7 +65,7 @@ class Matrix {
         val secondRows = secondMatrix.size
         val secondColumns = secondMatrix[0].size
 
-        val secondTransposition = cacheTransposition(secondMatrix)
+        val secondTransposition = cacheTransposition(secondMatrix, if (firstRows >= 1250) 256 else 128)
 
         //val secondTransRows = secondTransposition.size
         //val secondTransColumns = secondTransposition[0].size
@@ -92,7 +93,7 @@ class Matrix {
     }
 
     /**
-     * The method for multiplication two matrix using fast transposition
+     * Method that multiplies matrices using fast transposition
      */
     fun matrixFastTranspositionMultiplication(firstMatrix: Array<DoubleArray>, secondMatrix: Array<DoubleArray>):
             Array<DoubleArray> {
@@ -137,9 +138,9 @@ class Matrix {
 
 
     /**
-     * The method which transposes a matrix using cache
+     * Method that transposes a matrix using cache
      */
-    private fun cacheTransposition(matrix: Array<DoubleArray>, subMatrixSize: Int = 256): Array<DoubleArray> {
+    private fun cacheTransposition(matrix: Array<DoubleArray>, subMatrixSize: Int = 128): Array<DoubleArray> {
 
         val rows = matrix.size
 

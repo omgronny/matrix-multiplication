@@ -85,7 +85,7 @@ class KotlinStrassen {
         var n = n
 
         if (n <= 128) {
-            val matrix = Matrix()
+            val matrix = MatrixTransposition()
             return matrix.matrixFastTranspositionMultiplication(a, b)
         }
 
@@ -120,6 +120,9 @@ class KotlinStrassen {
 
     }
 
+    /**
+     * Method that multiplies matrices using Strassen's algorithm
+     */
     fun multiplyMatrix(a: Array<DoubleArray>, b: Array<DoubleArray>): Array<DoubleArray> {
 
         val n = a.size
