@@ -1,3 +1,3 @@
-# myProjects
+# matrix-multiplication
 
-The directory for my special projects including interships
+JetBrains summer internship 2021 einleitende aufgabe
